@@ -20,55 +20,6 @@ foreach ($items as $item) {
 if ($last_updated !== '')
     $last_updated = date('Y/m/d', strtotime($last_updated));
 
-// see if we need to filter backorders
-/*if ($hide_back_orders) {
-    $filtered_items = array();
-    $back_orders = 0;
-    $prev_item = NULL;
-   
-   
-    foreach ($items as $item) {
-        $size = $item["size"];
-        $amount = $item["amount"];
-       
-        // reset after every time size changes
-        if ($prev_item != NULL && strcmp($size,$prev_item["size"]) !== 0) {
-           
-            if ($prev_item["amount"] == 0) {
-                $prev_item["eta"] = "Out of Stock";
-                array_push($filtered_items,$prev_item);
-            }
-               
-            $prev_item = NULL;
-            $back_orders = 0;
-        }
-           
-        if ($amount < 0) {
-            $back_orders = $amount * -1;
-            $item["amount"] = 0;
-        }
-        else if ($back_orders > 0) {
-            if ($amount > $back_orders) {
-                $item["amount"] = $amount - $back_orders;
-                $back_orders = 0;
-            }
-            else {
-                $back_orders = $back_orders - $amount;
-                $item["amount"] = 0;
-            }
-        }
-       
-        if ($item["amount"] > 0) {
-            array_push($filtered_items,$item);
-        }
-       
-        $prev_item = $item;
-    }
-   
-   
-    $items = $filtered_items;
-}*/
-
 ?>
 <style>
 .product_table_inventory {
