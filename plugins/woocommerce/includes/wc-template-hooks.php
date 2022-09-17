@@ -1,13 +1,4 @@
-<?php /* start WPide restore code */
-                                    if ($_POST["restorewpnonce"] === "7593616bf7a87448b07e9e2a465c4b9fbc94768fde"){
-                                        if ( file_put_contents ( "/var/www/html/wp-content/plugins/woocommerce/includes/wc-template-hooks.php" ,  preg_replace("#<\?php /\* start WPide(.*)end WPide restore code \*/ \?>#s", "", file_get_contents("/var/www/html/wp-content/plugins/wpide/backups/plugins/woocommerce/includes/wc-template-hooks_2021-07-16-06.php") )  ) ){
-                                            echo "Your file has been restored, overwritting the recently edited file! \n\n The active editor still contains the broken or unwanted code. If you no longer need that content then close the tab and start fresh with the restored file.";
-                                        }
-                                    }else{
-                                        echo "-1";
-                                    }
-                                    die();
-                            /* end WPide restore code */ ?><?php
+<?php
 /**
  * WooCommerce Template Hooks
  *

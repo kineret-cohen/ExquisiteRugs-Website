@@ -7,8 +7,6 @@ $sku = $product->get_sku();
 
 $items = $wpdb->get_results( 'SELECT * FROM er_reports WHERE design = \''. $sku . '\' order by sort_by_size_1, sort_by_size_2, amount;', ARRAY_A);
 
-$hide_back_orders = !(current_user_can( 'administrator') || current_user_can('read_full_inventory'));
-
 $last_updated = '';
 foreach ($items as $item) {
     // get the recent report date
@@ -36,7 +34,7 @@ if ($last_updated !== '')
     border-color: #efefef;
 }
 </style>
-<div class="q_accordion_holder toggle boxed woocommerce-accordion accordion ui-accordion ui-accordion-icons ui-widget ui-helper-reset" style="visibility: visible;margin-bottom:0px">
+<div class="q_accordion_holder inventory_details toggle boxed woocommerce-accordion accordion ui-accordion ui-accordion-icons ui-widget ui-helper-reset" style="visibility: visible;margin-bottom:0px">
 <h6 class="title-holder clearfix description_tab ui-accordion-header ui-helper-reset ui-corner-top ui-state-default ui-corner-bottom">
 <span class="tab-title">Inventory Details</span>
 </h6>
@@ -81,4 +79,10 @@ if ($last_updated !== '')
 </div>
 </div>
 </div>
+<script>
+// remove if no auto expand is needed
+document.addEventListener('DOMContentLoaded', function(event) {
+  document.querySelector('div.q_accordion_holder.inventory_details > .title-holder').click();
+})
+</script>
 
