@@ -15,8 +15,10 @@ foreach ($items as $item) {
         $last_updated = $report_date;
 }
 
-if ($last_updated !== '')
-    $last_updated = date('Y/m/d', strtotime($last_updated));
+if ($last_updated !== '') {
+    $last_updated = new DateTime($last_updated, new DateTimeZone('UTC')); 
+    $last_updated->setTimezone( new DateTimeZone('US/Pacific') );
+}
 
 ?>
 <style>
@@ -74,7 +76,7 @@ if ($last_updated !== '')
             </div>
             <?php if ($last_updated !== '') { ?>
                 <br />
-                <small>* Last updated at <?php echo $last_updated ?></small>
+                <small>* Last updated at <?php echo $last_updated->format('Y-m-d H:i')?> Pacific Time</small>
             <?php } ?>
 </div>
 </div>
