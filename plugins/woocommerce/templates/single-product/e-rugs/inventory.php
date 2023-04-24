@@ -62,7 +62,7 @@ if ($last_updated !== '') {
                                 <td><?php echo $item["in_stock"]; ?></td>
                                 <td><?php echo $item["in_transit"] == null? '&mdash;':$item["in_transit"]; ?></td>
                                 <td><?php echo $item["eta"]; ?></td>
-                                <td><?php echo $item["on_loom"] == 1? 'Yes':''; ?></td>
+                                <td><?php echo $item["on_loom"]; ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
