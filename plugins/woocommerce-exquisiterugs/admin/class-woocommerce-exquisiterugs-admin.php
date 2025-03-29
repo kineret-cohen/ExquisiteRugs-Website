@@ -54,7 +54,42 @@ class WC_ExquisiteRugs_Admin {
 
         // Add menu items
         add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
+        
+        // Register settings
+        add_action('admin_init', array($this, 'register_settings'));
+        
+        // Add JavaScript for dynamic form behavior
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
 	}
+
+    /**
+     * Register settings
+     *
+     * @since    1.0.0
+     */
+    public function register_settings() {
+        register_setting('wc_exquisiterugs_options', 'wc_exquisiterugs_cart_access');
+        register_setting('wc_exquisiterugs_options', 'wc_exquisiterugs_allowed_users');
+    }
+
+    /**
+     * Enqueue admin scripts
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_admin_scripts($hook) {
+        if ('toplevel_page_wc-exquisiterugs-setup' !== $hook) {
+            return;
+        }
+
+        wp_enqueue_script(
+            'wc-exquisiterugs-admin',
+            plugin_dir_url(__FILE__) . 'js/woocommerce-exquisiterugs-admin.js',
+            array('jquery'),
+            $this->version,
+            true
+        );
+    }
 
 	/**
 	 * Register the stylesheets for the admin area.
@@ -137,13 +172,62 @@ class WC_ExquisiteRugs_Admin {
      * @since    1.0.0
      */
     public function display_plugin_setup_page() {
+        // Check if settings were saved
+        if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
+            add_settings_error(
+                'wc_exquisiterugs_messages',
+                'wc_exquisiterugs_message',
+                'Settings Saved',
+                'updated'
+            );
+        }
+
+        // Get current values
+        $cart_access = get_option('wc_exquisiterugs_cart_access', 'disable');
+        $allowed_users = get_option('wc_exquisiterugs_allowed_users', '');
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-            <div class="card">
-                <h2>Welcome to ExquisiteRugs Setup</h2>
-                <p>Hello World! This is your setup page.</p>
-            </div>
+            
+            <?php settings_errors('wc_exquisiterugs_messages'); ?>
+
+            <form method="post" action="options.php">
+                <?php
+                settings_fields('wc_exquisiterugs_options');
+                ?>
+                <div class="card">
+                    <h2>Cart Access Settings</h2>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row">Cart Access Control</th>
+                            <td>
+                                <fieldset>
+                                    <label>
+                                        <input type="radio" name="wc_exquisiterugs_cart_access" value="disable" <?php checked($cart_access, 'disable'); ?>>
+                                        Disable Cart
+                                    </label><br>
+                                    <label>
+                                        <input type="radio" name="wc_exquisiterugs_cart_access" value="all" <?php checked($cart_access, 'all'); ?>>
+                                        Allow Cart to All Users
+                                    </label><br>
+                                    <label>
+                                        <input type="radio" name="wc_exquisiterugs_cart_access" value="selected" <?php checked($cart_access, 'selected'); ?>>
+                                        Allow Cart to Selected Users
+                                    </label>
+                                </fieldset>
+                            </td>
+                        </tr>
+                        <tr class="allowed-users-field" style="display: <?php echo $cart_access === 'selected' ? 'table-row' : 'none'; ?>">
+                            <th scope="row">Allowed Users</th>
+                            <td>
+                                <input type="text" name="wc_exquisiterugs_allowed_users" value="<?php echo esc_attr($allowed_users); ?>" class="regular-text">
+                                <p class="description">Enter comma-separated list of users (e.g. kineret, alex)</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <?php submit_button('Save Settings'); ?>
+            </form>
         </div>
         <?php
     }

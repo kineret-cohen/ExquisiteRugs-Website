@@ -29,4 +29,24 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	jQuery(document).ready(function($) {
+		// Function to toggle the allowed users field visibility
+		function toggleAllowedUsersField() {
+			var selectedValue = $('input[name="wc_exquisiterugs_cart_access"]:checked').val();
+			if (selectedValue === 'selected') {
+				$('.allowed-users-field').show();
+			} else {
+				$('.allowed-users-field').hide();
+			}
+		}
+
+		// Run on page load
+		toggleAllowedUsersField();
+
+		// Run when radio buttons change
+		$('input[name="wc_exquisiterugs_cart_access"]').on('change', function() {
+			toggleAllowedUsersField();
+		});
+	});
+
 })( jQuery );
