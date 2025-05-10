@@ -90,6 +90,7 @@ class WC_ExquisiteRugs {
 	 * - WC_ExquisiteRugs_i18n. Defines internationalization functionality.
 	 * - WC_ExquisiteRugs_Admin. Defines all hooks for the admin area.
 	 * - WC_ExquisiteRugs_Public. Defines all hooks for the public side of the site.
+	 * - WC_ExquisiteRugs_Checkout. Defines all hooks for the checkout functionality.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -121,6 +122,11 @@ class WC_ExquisiteRugs {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-woocommerce-exquisiterugs-public.php';
+
+		/**
+		 * The class responsible for defining all hooks for the checkout functionality.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-exquisiterugs-checkout.php';
 
 		$this->loader = new WC_ExquisiteRugs_Loader();
 
@@ -179,6 +185,9 @@ class WC_ExquisiteRugs {
 		// exquisite rugs specific
 		add_action( 'woocommerce_after_single_product_summary', 'exquisiterugs_recently_viewed_products', 30 );
 		add_action( 'woocommerce_share', 'exquisiterugs_product_inventory', 10 );
+
+		// Initialize checkout functionality
+		new WC_ExquisiteRugs_Checkout();
 	}
 
 	/**
