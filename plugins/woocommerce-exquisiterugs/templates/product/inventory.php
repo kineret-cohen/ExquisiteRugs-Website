@@ -5,7 +5,7 @@ global $wpdb, $product;
 
 $sku = $product->get_sku();
 
-$items = $wpdb->get_results( 'SELECT * FROM er_inventory WHERE design = \''. $sku . '\' order by sort_by_size_1, sort_by_size_2, amount;', ARRAY_A);
+$items = $wpdb->get_results( 'SELECT * FROM er_inventory WHERE design = \''. $sku . '\' order by sort_by_size_1, sort_by_size_2, in_stock;', ARRAY_A);
 
 $last_updated = '';
 foreach ($items as $item) {
@@ -35,6 +35,22 @@ if ($last_updated !== '') {
     border-bottom-style: solid;
     border-color: #efefef;
 }
+
+.q_accordion_holder {
+    font-family: Raleway, sans-serif;
+}
+
+.q_accordion_holder.accordion.boxed .ui-accordion-header {
+    border: 0px;
+    border-radius: 0px;
+}
+
+.q_accordion_holder.boxed div.accordion_content {
+    border: 0px;
+    font-size: 14px;
+    color: #818181;
+}
+
 </style>
 <div class="q_accordion_holder inventory_details toggle boxed woocommerce-accordion accordion ui-accordion ui-accordion-icons ui-widget ui-helper-reset" style="visibility: visible;margin-bottom:0px">
 <h6 class="title-holder clearfix description_tab ui-accordion-header ui-helper-reset ui-corner-top ui-state-default ui-corner-bottom">
@@ -51,8 +67,9 @@ if ($last_updated !== '') {
                                 <th>Size</th>
                                 <th>In Stock</th>
                                 <th>In Transit</th>
-                                <th>ETA (In Transit)</th>
+                                <th>ETA</th>
                                 <th>On Loom</th>
+                                <th>ETA</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,8 +78,9 @@ if ($last_updated !== '') {
                                 <td><?php echo $item["size"]; ?></td>
                                 <td><?php echo $item["in_stock"]; ?></td>
                                 <td><?php echo $item["in_transit"] == null? '&mdash;':$item["in_transit"]; ?></td>
-                                <td><?php echo $item["eta"]; ?></td>
-                                <td><?php echo $item["on_loom"]; ?></td>
+                                <td><?php echo $item["in_transit_eta"] == null? '&mdash;':$item["in_transit_eta"]; ?></td>
+                                <td><?php echo $item["on_loom"] == null? '&mdash;':$item["on_loom"]; ?></td>
+                                <td><?php echo $item["on_loom_eta"] == null? '&mdash;':$item["on_loom_eta"]; ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -76,7 +94,7 @@ if ($last_updated !== '') {
             </div>
             <?php if ($last_updated !== '') { ?>
                 <br />
-                <small>* Last updated at <?php echo $last_updated->format('Y-m-d H:i')?> Pacific Time</small>
+                <small>* ETAs subject to change. Last updated at <?php echo $last_updated->format('Y-m-d H:i')?> Pacific Time</small>
             <?php } ?>
 </div>
 </div>
@@ -87,4 +105,3 @@ document.addEventListener('DOMContentLoaded', function(event) {
   document.querySelector('div.q_accordion_holder.inventory_details > .title-holder').click();
 })
 </script>
-
